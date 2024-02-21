@@ -20,7 +20,7 @@
       <h2>Search Results</h2>
       <ul class="list-group">
         {% for result in results %}
-        <li class="list-group-item">{{ result }}</li>
+        <li class="list-group-item"><a href="{% url 'component' slug=result.slug %}">{{ result }}</a></li>
         {% endfor %}
       </ul>
     </div>

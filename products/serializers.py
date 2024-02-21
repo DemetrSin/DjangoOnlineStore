@@ -11,6 +11,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ComponentSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
 
     class Meta:
         model = Component
