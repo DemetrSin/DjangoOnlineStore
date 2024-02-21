@@ -57,9 +57,6 @@ wheels/
 *.egg
 MANIFEST
 
-# Django development server
-manage.py
-
 # Docker
 .dockerignore
 Dockerfile
