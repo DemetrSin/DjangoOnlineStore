@@ -1,8 +1,8 @@
 import os.path
-from django.utils.text import slugify
 
 from django.conf import settings
 from django.db import models
+from django.utils.text import slugify
 
 
 class Category(models.Model):

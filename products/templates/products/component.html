@@ -5,7 +5,6 @@
 {% block content %}
   <!-- Catalog components -->
   <div class="row">
-    {% for component in components %}
     <div class="col-md-4 mb-4">
       <div class="card">
         <!-- If you have a picture field -->
@@ -13,18 +12,18 @@
         <img src="{{ component.picture }}" class="card-img-top" alt="{{ component.name }}">
         {% endif %}
         <div class="card-body">
-          <h5 class="card-title text-center">{{ component.name }}</h5>
+          <h5 class="card-title">{{ component.name }}</h5>
+          <p class="card-text">{{ component.description }}</p>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Manufacturer: {{ component.manufacturer }}</li>
             <li class="list-group-item">Model: {{ component.model }}</li>
+            <li class="list-group-item">Vendor Code: {{ component.vendor_code }}</li>
             <li class="list-group-item">Price: ${{ component.price }}</li>
             <li class="list-group-item">In Stock: {{ component.in_stock }}</li>
             <!-- Add more information as needed -->
           </ul>
         </div>
-      <a class="btn btn-outline-dark" href="{% url 'component' slug=component.slug %}">View</a>
       </div>
     </div>
-    {% endfor %}
   </div>
 {% endblock %}

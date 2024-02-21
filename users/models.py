@@ -1,6 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User
-
+from django.db import models
 
 ORDER_STATUS_CHOICES = (
     ('New', 'new'),

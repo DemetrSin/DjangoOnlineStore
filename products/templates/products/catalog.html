@@ -3,12 +3,48 @@
 {% block title %}Catalog{% endblock %}
 
 {% block content %}
-  <!-- Catalog categories -->
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <form method="POST" class="d-flex">
+        {% csrf_token %}
+        <input type="text" class="form-control me-2" name="query" placeholder="Search">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
+  </div>
+
+  {% if results %}
+  <div class="row mt-4">
+    <div class="col-md-8 offset-md-2">
+      <h2>Search Results</h2>
+      <ul class="list-group">
+        {% for result in results %}
+        <li class="list-group-item">{{ result }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% else %}
+  <div class="row mt-4">
+    <div class="col-md-8 offset-md-2">
+      <p>No results found.</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<div class="container mt-4">
   <div class="row">
     {% for category in categories %}
     <div class="col-md-4">
-      <a href="{% url 'category' slug=category.slug %}"> <h2>{{ category.name }}</h2></a>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title"><a href="{% url 'category' slug=category.slug %}">{{ category.name }}</a></h5>
+        </div>
+      </div>
     </div>
     {% endfor %}
   </div>
+</div>
 {% endblock %}
