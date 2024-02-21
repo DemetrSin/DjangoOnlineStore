@@ -9,7 +9,7 @@ from users.views import index_redirect
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
-    path('users/', include('products.urls')),
+    path('products/', include('products.urls')),
     path('', index_redirect)
 ]
 
