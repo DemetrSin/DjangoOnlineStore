@@ -1,20 +1,8 @@
 from django.urls import path
 
-from .views import (
-    CatalogView,
-    CategoryView,
-    ComponentView,
-    CartView,
-    AddToCartView,
-    RemoveFromCartView
-)
-
-from .api_views import (
-    CategoryListView,
-    CartListView,
-    CartItemListView,
-)
-
+from .api_views import CartItemListView, CartListView, CategoryListView
+from .views import (AddToCartView, CartView, CatalogView, CategoryView,
+                    ComponentView, RemoveFromCartView)
 
 urlpatterns = [
     path('api/v1/categories', CategoryListView.as_view(), name='categories'),

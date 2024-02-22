@@ -7,26 +7,12 @@ from django.views import View
 from django.views.generic import FormView
 from django.views.generic.edit import UpdateView
 
-from .forms import UpdateProfileForm, UserRegisterForm
+from .forms import ClientCreateForm, UpdateProfileForm, UserRegisterForm
+from .models import Client
 
 
 def index_redirect(request):
     return redirect('home')
-
-
-# class CustomUserRegisterView(View):
-#     template_name = 'users/register.html'
-#
-#     def get(self, request, *args, **kwargs):
-#         form = CustomUserRegisterView()
-#         return render(request, self.template_name, {'form': form})
-#
-#     def post(self, request, *args, **kwargs):
-#         form = CustomUserRegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('login')
-#         return render(request, self.template_name, {'form': form})
 
 
 class CustomUserRegisterView(FormView):
@@ -78,3 +64,26 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class ClientCreateView(View):
+    template_name = 'users/client.html'
+
+    def get(self, request):
+        form = ClientCreateForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = ClientCreateForm(request.POST)
+        if form.is_valid():
+            Client.objects.get_or_create(
+                user=request.user,
+                first_name=form.instance.first_name,
+                surname=form.instance.surname,
+                email=request.user.email,
+                phone=form.instance.phone,
+                delivery_address=form.instance.delivery_address
+            )
+
+            return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form})

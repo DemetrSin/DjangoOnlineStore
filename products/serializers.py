@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Cart, Category, Component, CartItem
+from .models import Cart, CartItem, Category, Component
 
 
 class CategorySerializer(serializers.ModelSerializer):

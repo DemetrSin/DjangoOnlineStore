@@ -47,6 +47,10 @@
   </table>
   <div class="text-end">
     <p>Total: ${{ total_price }}</p>
-    <a href="" class="btn btn-primary">Checkout</a>
+      {% if client %}
+          <a href="{% url 'home' %}" class="btn btn-primary">Checkout</a>
+      {% else %}
+        <a href="{% url 'client' %}" class="btn btn-primary">Checkout</a>
+      {% endif %}
   </div>
 {% endblock %}

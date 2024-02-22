@@ -1,13 +1,14 @@
-from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
-from rest_framework import generics
-from django.contrib import messages
+
+from users.models import Client
 
 from .forms import SearchForm
-from .models import Cart, Category, Component, CartItem
-from .serializers import (CartSerializer, CategorySerializer,
-                          ComponentSerializer, CartItemSerializer)
+from .models import Cart, CartItem, Category, Component
+from .serializers import (CartItemSerializer, CategorySerializer,
+                          ComponentSerializer)
 
 
 class CatalogView(View):
@@ -61,9 +62,16 @@ class CartView(View):
         cart_items = cart.cartitem_set.all()
         total_price = sum(item.component.price * item.quantity for item in cart_items)
         cart_items_serializer = CartItemSerializer(cart_items, many=True)
+        try:
+            client = Client.objects.get(user=request.user)
+        except Client.DoesNotExist:
+            client = None
         return render(request, self.template_name, {
             'cart_items': cart_items_serializer.data,
-            'total_price': total_price})
+            'client': client,
+            'total_price': total_price
+        }
+                      )
 
 
 class AddToCartView(View):
