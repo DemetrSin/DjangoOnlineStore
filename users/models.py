@@ -28,7 +28,7 @@ class Order(models.Model):
     order_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"Order #{self.pk} by {self.client.name} {self.client.surname}"
+        return f"Order #{self.pk} by {self.client.first_name} {self.client.surname}"
 
 
 class Review(models.Model):

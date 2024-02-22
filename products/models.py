@@ -46,7 +46,7 @@ class Cart(models.Model):
     components = models.ManyToManyField(Component, through='CartItem')
 
     def __str__(self):
-        return f"{self.user.pk} > {self.user} > Cart"
+        return f"Cart #{self.user.pk} > {self.user.username}"
 
 
 class CartItem(models.Model):
@@ -55,7 +55,7 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f"{self.cart.pk} > {self.component}"
+        return f"Cart_Item{self.component.name} > {self.cart.user.username}"
 
     def count_total_price(self):
         return self.component.price * self.quantity

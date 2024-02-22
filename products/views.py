@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
 
-from users.models import Client
+from users.models import Client, Order
 
 from .forms import SearchForm
 from .models import Cart, CartItem, Category, Component
@@ -56,22 +56,47 @@ class ComponentView(View):
 
 class CartView(View):
     template_name = 'products/cart.html'
+    order_template_name = 'products/order.html'
+
+    def get_cart_items(self, request):
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        print(cart.cartitem_set.all())
+        return cart.cartitem_set.all()
+
+    def get_total_price(self, cart_items):
+        return sum(item.component.price * item.quantity for item in cart_items)
+
+    def get_client(self, request):
+        try:
+            return Client.objects.get(user=request.user)
+        except Client.DoesNotExist:
+            return None
+
+    def create_order(self, client, total_price):
+        return Order.objects.create(
+            client=client,
+            order_status='New',
+            order_price=total_price
+        )
 
     def get(self, request):
-        cart, created = Cart.objects.get_or_create(user=request.user)
-        cart_items = cart.cartitem_set.all()
-        total_price = sum(item.component.price * item.quantity for item in cart_items)
+        cart_items = self.get_cart_items(request)
+        total_price = self.get_total_price(cart_items)
         cart_items_serializer = CartItemSerializer(cart_items, many=True)
-        try:
-            client = Client.objects.get(user=request.user)
-        except Client.DoesNotExist:
-            client = None
+        client = self.get_client(request)
         return render(request, self.template_name, {
             'cart_items': cart_items_serializer.data,
             'client': client,
             'total_price': total_price
-        }
-                      )
+        })
+
+    def post(self, request):
+        cart_items = self.get_cart_items(request)
+        total_price = self.get_total_price(cart_items)
+        client = self.get_client(request)
+        order = self.create_order(client, total_price)
+        Cart.objects.filter(user=self.request.user).delete()
+        return render(request, self.order_template_name, {'order': order})
 
 
 class AddToCartView(View):

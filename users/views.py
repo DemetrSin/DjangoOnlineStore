@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import FormView
 from django.views.generic.edit import UpdateView
@@ -89,7 +89,7 @@ class ClientCreateView(LoginRequiredMixin, View):
                 delivery_address=form.instance.delivery_address
             )
 
-            return render(request, self.template_name, {'form': form})
+            return redirect(reverse('cart'))
         return render(request, self.template_name, {'form': form})
 
 
