@@ -29,13 +29,14 @@
             </div>
           </div>
         </div>
+          <a href="{% url 'cart' %}" class="btn btn-outline-light">
+        <i class="fas fa-shopping-cart"></i>
+      </a>
       {% else %}
         <a class="navbar-brand" href="{% url 'register' %}">Registration</a>
         <a class="navbar-brand" href="{% url 'login' %}">Login</a>
       {% endif %}
-  <a href="{% url 'cart' %}" class="btn btn-outline-light">
-        <i class="fas fa-shopping-cart"></i>
-      </a>
+
     </div>
   </nav>
 

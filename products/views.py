@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
 
-from users.models import Client, Order
+from users.models import Client, Order, Review
 
 from .forms import SearchForm
 from .models import Cart, CartItem, Category, Component
