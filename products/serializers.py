@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Category, Component
+from .models import Cart, Category, Component, CartItem
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -15,4 +15,19 @@ class ComponentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Component
+        fields = '__all__'
+
+
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = '__all__'
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    cart = CartSerializer()
+    component = ComponentSerializer()
+
+    class Meta:
+        model = CartItem
         fields = '__all__'

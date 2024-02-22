@@ -39,3 +39,23 @@ class Component(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    components = models.ManyToManyField(Component, through='CartItem')
+
+    def __str__(self):
+        return f"{self.user.pk} > {self.user} > Cart"
+
+
+class CartItem(models.Model):
+    component = models.ForeignKey(Component, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.cart.pk} > {self.component}"
+
+    def count_total_price(self):
+        return self.component.price * self.quantity

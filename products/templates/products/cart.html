@@ -1,0 +1,52 @@
+{% extends 'users/base.html' %}
+{% include 'django.contrib.messages' %}
+
+{% block title %}
+    Your Cart
+{% endblock %}
+
+{% block content %}
+  <h1>Your Cart</h1>
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Component</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+        <th scope="col">Total</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart_items %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>{{ item.component.name }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.component.price }}</td>
+          <td>{{ item.count_total_price }}</td>
+          <td>
+          <form method="post" action="{% url 'add_cart_item' slug=item.component.slug %}">
+            {% csrf_token %}
+            <button class="btn btn-outline-dark" type="submit">Add</button>
+          </form>
+          <form method="post" action="{% url 'remove_cart_item' slug=item.component.slug %}">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">Remove</button>
+          </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="text-end">
+    <p>Total: ${{ total_price }}</p>
+    <a href="" class="btn btn-primary">Checkout</a>
+  </div>
+{% endblock %}

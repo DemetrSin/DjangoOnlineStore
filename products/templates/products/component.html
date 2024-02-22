@@ -1,8 +1,15 @@
 {% extends 'users/base.html' %}
+{% include 'django.contrib.messages' %}
 
 {% block title %}Catalog{% endblock %}
 
 {% block content %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    <a class="btn btn-outline-dark" href="{% url 'cart' %}">Check Cart</a>
+    </div>
+    {% endfor %}
   <!-- Catalog components -->
   <div class="row">
     <div class="col-md-4 mb-4">
@@ -21,6 +28,10 @@
             <li class="list-group-item">Price: ${{ component.price }}</li>
             <li class="list-group-item">In Stock: {{ component.in_stock }}</li>
             <li class="list-group-item">Category: {{ component.category.name }}</li>
+              <form method="post" action="{% url 'add_cart_item' slug=component.slug %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-dark" type="submit">Add to Cart</button>
+              </form>
             <!-- Add more information as needed -->
           </ul>
         </div>
