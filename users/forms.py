@@ -14,7 +14,6 @@ class UserRegisterForm(UserCreationForm):
 
 
 class UpdateProfileForm(forms.ModelForm):
-    email = forms.EmailField(required=False)
 
     class Meta:
         model = User
@@ -26,3 +25,9 @@ class ClientCreateForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = ['first_name', 'surname', 'phone', 'delivery_address']
+
+
+class ClientUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Client
+        fields = ['first_name', 'surname', 'phone', 'delivery_address', 'email']

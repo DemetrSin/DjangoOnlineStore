@@ -15,11 +15,34 @@
             <div class="mb-3">
               <p class="mb-0"><strong>Email address:</strong> {{ user.email }}</p>
             </div>
-            <!-- Add more fields as needed -->
             <a href="{% url 'update_profile' %}" class="btn btn-primary">Edit Profile</a>
           </div>
         </div>
       </div>
+      {% if client %}
+      <div class="col-md-6">
+        <div class="card mt-5">
+          <div class="card-header">
+            <h5 class="mb-0">Client Profile</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <p class="mb-0"><strong>Name:</strong> {{ client.first_name }} {{ client.surname }}</p>
+            </div>
+            <div class="mb-3">
+              <p class="mb-0"><strong>Email address:</strong> {{ client.email }}</p>
+            </div>
+            <div class="mb-3">
+              <p class="mb-0"><strong>Phone:</strong> {{ client.phone }}</p>
+            </div>
+            <div class="mb-3">
+              <p class="mb-0"><strong>Delivery Address:</strong> {{ client.delivery_address }}</p>
+            </div>
+            <a href="{% url 'client_update' %}" class="btn btn-primary">Edit Profile</a>
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

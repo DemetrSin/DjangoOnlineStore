@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import FormView
 from django.views.generic.edit import UpdateView
 
-from .forms import ClientCreateForm, UpdateProfileForm, UserRegisterForm
+from .forms import ClientCreateForm, UpdateProfileForm, UserRegisterForm, ClientUpdateForm
 from .models import Client
 
 
@@ -45,11 +45,15 @@ class CustomLogoutView(LogoutView):
         return reverse_lazy('home')
 
 
-class ProfileView(View):
+class ProfileView(LoginRequiredMixin, View):
     template_name = 'users/profile.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        try:
+            client = Client.objects.get(user=request.user)
+        except Client.DoesNotExist:
+            client = None
+        return render(request, self.template_name, {'client': client})
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
@@ -66,7 +70,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class ClientCreateView(View):
+class ClientCreateView(LoginRequiredMixin, View):
     template_name = 'users/client.html'
 
     def get(self, request):
@@ -87,3 +91,17 @@ class ClientCreateView(View):
 
             return render(request, self.template_name, {'form': form})
         return render(request, self.template_name, {'form': form})
+
+
+class ClientUpdateView(LoginRequiredMixin, UpdateView):
+    model = Client
+    form_class = ClientUpdateForm
+    template_name = 'users/client_update.html'
+    success_url = reverse_lazy('profile')
+
+    def get_object(self, queryset=None):
+        return Client.objects.get(user=self.request.user)
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
