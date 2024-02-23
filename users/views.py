@@ -50,7 +50,7 @@ class ProfileView(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
-            client = get_object_or_404(Client, user=request.user)
+            client = Client.objects.get(user=request.user)
         except Client.DoesNotExist:
             client = None
         return render(request, self.template_name, {'client': client})
@@ -131,5 +131,12 @@ class ReviewsDetailView(View):
     template_name = 'users/reviews_detail.html'
 
     def get(self, request):
+        is_client = check_for_client_data(request.user.id)
         reviews = Review.objects.all()
-        return render(request, self.template_name, {'reviews': reviews})
+        return render(request, self.template_name, {'reviews': reviews, 'is_client': is_client})
+
+
+def check_for_client_data(user_id):
+    user = User.objects.get(id=user_id)
+    if hasattr(user, 'client_profile'):
+        return True

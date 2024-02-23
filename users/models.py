@@ -12,7 +12,7 @@ ORDER_STATUS_CHOICES = (
 
 
 class Client(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='client_profile')
     first_name = models.CharField(max_length=32)
     surname = models.CharField(max_length=32)
     email = models.EmailField()
@@ -44,7 +44,7 @@ class OrderItem(models.Model):
 
 
 class Review(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='reviews')
+    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, blank=True, related_name='reviews')
     review_date = models.DateTimeField(auto_now_add=True)
     grade = models.CharField(max_length=1, choices=[(str(i), str(i)) for i in range(1, 6)])
     review_text = models.TextField()

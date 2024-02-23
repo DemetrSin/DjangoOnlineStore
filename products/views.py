@@ -141,7 +141,7 @@ class BaseOrderView(View):
     template_name = None
 
     def get_client(self, request):
-        return get_object_or_404(Client, user=request.user)
+        return Client.objects.get(user=request.user)
 
     def get_orders(self, request):
         client = self.get_client(request)
@@ -158,8 +158,9 @@ class OrdersDetailView(BaseOrderView):
     def get(self, request):
         try:
             orders = self.get_orders(request)
-        except Order.DoesNotExist:
-            print('something')
+        except Client.DoesNotExist:
+            messages.info(request, message="To see orders page please create client profile in form below")
+            return redirect('client')
         return render(request, self.template_name, {'orders': orders})
 
 
