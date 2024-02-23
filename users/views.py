@@ -1,10 +1,11 @@
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import FormView
+from django.views.generic import FormView, DeleteView
 from django.views.generic.edit import UpdateView
 
 from .forms import ClientCreateForm, UpdateProfileForm, UserRegisterForm, ClientUpdateForm, ReviewCreateForm
@@ -23,6 +24,20 @@ class CustomUserRegisterView(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
+
+class AccountDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    template_name = 'users/account_delete.html'
+    success_url = reverse_lazy('home')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def delete(self, request, *args, **kwargs):
+        self.get_object()
+        logout(request)
+        return super().delete(request, *args, **kwargs)
 
 
 class HomeView(View):
