@@ -10,7 +10,7 @@
           <form action="{% url 'order_detail' order_id=order.id %}" method="post">
             {% csrf_token %}
             <input type="hidden" name="order_id" value="{{ order.id }}">
-            <button type="submit">View Order Details - {{ order.order_date }}</button>
+            <button class="btn btn-outline-dark " type="submit">View Order Details - {{ order.order_date }}</button>
           </form>
         </li>
       {% endfor %}
@@ -19,6 +19,6 @@
     <p>No orders found.</p>
   {% endif %}
   <div class="text-end">
-    <a href="{% url 'catalog' %}" class="btn btn-primary">Back to Catalog</a>
+    <a href="{% url 'catalog' %}" class="btn btn-dark">Back to Catalog</a>
   </div>
 {% endblock %}

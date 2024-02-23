@@ -30,7 +30,8 @@
     </div>
     {% endfor %}
   </div>
+    <p>Do you like our services? Leave the <a href="{% url 'review_create' %}" class="btn btn-dark">Review</a></p>
   <div class="text-end">
-    <a href="{% url 'catalog' %}" class="btn btn-primary">Back to Catalog</a>
+    <a href="{% url 'catalog' %}" class="btn btn-dark">Back to Catalog</a>
   </div>
 {% endblock %}

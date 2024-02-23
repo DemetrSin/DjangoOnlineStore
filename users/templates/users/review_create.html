@@ -1,0 +1,29 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h1 class="card-title text-center">Create Review</h1>
+          </div>
+          <div class="card-body">
+            <form method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="id_grade">Grade:</label>
+                {{ form.grade }}
+              </div>
+              <div class="form-group">
+                <label for="id_review_text">Review Text:</label>
+                {{ form.review_text }}
+              </div>
+              <button type="submit" class="btn btn-dark">Submit Review</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

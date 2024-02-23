@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from users.models import Client
+from users.models import Client, Review
 
 
 class UserRegisterForm(UserCreationForm):
@@ -31,3 +31,9 @@ class ClientUpdateForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = ['first_name', 'surname', 'phone', 'delivery_address', 'email']
+
+
+class ReviewCreateForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['grade', 'review_text']

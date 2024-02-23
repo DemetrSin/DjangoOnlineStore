@@ -7,8 +7,8 @@ from django.views import View
 from django.views.generic import FormView
 from django.views.generic.edit import UpdateView
 
-from .forms import ClientCreateForm, UpdateProfileForm, UserRegisterForm, ClientUpdateForm
-from .models import Client
+from .forms import ClientCreateForm, UpdateProfileForm, UserRegisterForm, ClientUpdateForm, ReviewCreateForm
+from .models import Client, Review
 
 
 def index_redirect(request):
@@ -105,3 +105,31 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class ReviewCreateView(View):
+    template_name = 'users/review_create.html'
+
+    def get(self, request):
+        form = ReviewCreateForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = ReviewCreateForm(request.POST)
+        if form.is_valid():
+            client = get_object_or_404(Client, user=request.user)
+            Review.objects.create(
+                client=client,
+                grade=form.instance.grade,
+                review_text=form.instance.review_text
+            )
+            return redirect('reviews_detail')
+        return render(request, self.template_name, {'form': form})
+
+
+class ReviewsDetailView(View):
+    template_name = 'users/reviews_detail.html'
+
+    def get(self, request):
+        reviews = Review.objects.all()
+        return render(request, self.template_name, {'reviews': reviews})

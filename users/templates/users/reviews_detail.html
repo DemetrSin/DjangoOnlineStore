@@ -1,0 +1,27 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+  <h1>All Reviews</h1>
+  {% if reviews %}
+    <div class="row">
+      {% for review in reviews %}
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Review by {{ review.client.first_name }} {{ review.client.surname }}</h5>
+              <p class="card-text"><strong>Grade:</strong> {{ review.grade }}</p>
+              <p class="card-text"><strong>Review Date:</strong> {{ review.review_date }}</p>
+              <p class="card-text"><strong>Review Text:</strong> {{ review.review_text }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No reviews found.</p>
+  {% endif %}
+    <a href="{% url 'review_create' %}" class="btn btn-dark">Review</a>
+  <div class="text-end">
+    <a href="{% url 'catalog' %}" class="btn btn-dark">Back to Catalog</a>
+  </div>
+{% endblock %}

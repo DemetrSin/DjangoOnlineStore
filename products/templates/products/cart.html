@@ -51,10 +51,10 @@
       {% if client %}
           <form method="post">
             {% csrf_token %}
-            <button class="btn btn-primary" type="submit">Checkout</button>
+            <button class="btn btn-dark" type="submit">Checkout</button>
           </form>
       {% else %}
-        <a href="{% url 'client' %}" class="btn btn-primary">Checkout</a>
+        <a href="{% url 'client' %}" class="btn btn-dark">Checkout</a>
       {% endif %}
   {% else %}
   <p>Your cart is empty now. Go to <a href="{% url 'catalog' %}">purchases</a></p>

@@ -46,8 +46,8 @@ class OrderItem(models.Model):
 class Review(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='reviews')
     review_date = models.DateTimeField(auto_now_add=True)
-    grade = models.CharField(max_length=1, choices=[(i, i) for i in range(1, 6)])
+    grade = models.CharField(max_length=1, choices=[(str(i), str(i)) for i in range(1, 6)])
     review_text = models.TextField()
 
     def __str__(self):
-        return f"Review #{self.pk} by {self.client.name} {self.client.surname}"
+        return f"Review #{self.pk} by {self.client.user.username} {self.client.surname}"
