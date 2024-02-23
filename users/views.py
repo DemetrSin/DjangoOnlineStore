@@ -2,13 +2,14 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import redirect, render, get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import FormView, DeleteView
+from django.views.generic import DeleteView, FormView
 from django.views.generic.edit import UpdateView
 
-from .forms import ClientCreateForm, UpdateProfileForm, UserRegisterForm, ClientUpdateForm, ReviewCreateForm
+from .forms import (ClientCreateForm, ClientUpdateForm, ReviewCreateForm,
+                    UpdateProfileForm, UserRegisterForm)
 from .models import Client, Review
 
 
