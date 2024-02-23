@@ -55,7 +55,7 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f"Cart_Item{self.component.name} > {self.cart.user.username}"
+        return f"Cart_Item {self.component.name}  {self.cart.user.username}"
 
     def count_total_price(self):
         return self.component.price * self.quantity

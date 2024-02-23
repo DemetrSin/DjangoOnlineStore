@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
 
-from users.models import Client, Order, Review
+from users.models import Client, Order, Review, OrderItem
 
 from .forms import SearchForm
 from .models import Cart, CartItem, Category, Component
@@ -60,7 +60,6 @@ class CartView(View):
 
     def get_cart_items(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)
-        print(cart.cartitem_set.all())
         return cart.cartitem_set.all()
 
     def get_total_price(self, cart_items):
@@ -79,6 +78,15 @@ class CartView(View):
             order_price=total_price
         )
 
+    def create_order_items(self, order, cart_items):
+        for cart_item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                component=cart_item.component,
+                quantity=cart_item.quantity,
+                price=cart_item.component.price
+            )
+
     def get(self, request):
         cart_items = self.get_cart_items(request)
         total_price = self.get_total_price(cart_items)
@@ -95,8 +103,10 @@ class CartView(View):
         total_price = self.get_total_price(cart_items)
         client = self.get_client(request)
         order = self.create_order(client, total_price)
+        self.create_order_items(order=order, cart_items=cart_items)
+        order_items = order.order_items.all()
         Cart.objects.filter(user=self.request.user).delete()
-        return render(request, self.order_template_name, {'order': order})
+        return render(request, self.order_template_name, {'order': order, 'order_items': order_items})
 
 
 class AddToCartView(View):
@@ -125,3 +135,15 @@ class RemoveFromCartView(View):
             cart_item.delete()
             messages.success(request, 'Item deleted from cart successfully!')
         return redirect(reverse('cart'))
+
+
+class OrdersDetailView(View):
+    template_name = 'products/orders_detail.html'
+
+    def get(self, request):
+        try:
+            client = Client.objects.get(user=request.user)
+            orders = Order.objects.filter(client=client).all()
+        except Order.DoesNotExist:
+            print('something')
+        return render(request, self.template_name, {'orders': orders})

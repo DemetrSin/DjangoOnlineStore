@@ -1,5 +1,5 @@
 {% extends 'users/base.html' %}
-{% include 'django.contrib.messages' %}
+{% load static %}
 
 {% block title %}
     Order Details
@@ -7,16 +7,28 @@
 
 {% block content %}
   <h1>Order Details</h1>
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-        {{ message }}
-    </div>
-    {% endfor %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">
+      {{ message }}
+  </div>
+  {% endfor %}
   <div>
     <p><strong>Order Date:</strong> {{ order.order_date }}</p>
     <p><strong>Client:</strong> {{ order.client.first_name }}</p>
     <p><strong>Status:</strong> {{ order.order_status }}</p>
     <p><strong>Total Price:</strong> ${{ order.order_price }}</p>
+  </div>
+  <div class="order-items">
+    <h2>Order Items</h2>
+    {% for item in order_items %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ item.component.name }}</h5>
+        <p class="card-text">Quantity: {{ item.quantity }}</p>
+        <p class="card-text">Price: ${{ item.price }}</p>
+      </div>
+    </div>
+    {% endfor %}
   </div>
   <div class="text-end">
     <a href="{% url 'catalog' %}" class="btn btn-primary">Back to Catalog</a>
