@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import FormView
@@ -50,7 +50,7 @@ class ProfileView(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
-            client = Client.objects.get(user=request.user)
+            client = get_object_or_404(Client, user=request.user)
         except Client.DoesNotExist:
             client = None
         return render(request, self.template_name, {'client': client})

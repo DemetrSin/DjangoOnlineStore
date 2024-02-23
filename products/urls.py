@@ -2,7 +2,7 @@ from django.urls import path
 
 from .api_views import CartItemListView, CartListView, CategoryListView
 from .views import (AddToCartView, CartView, CatalogView, CategoryView,
-                    ComponentView, RemoveFromCartView, OrdersDetailView)
+                    ComponentView, RemoveFromCartView, OrdersDetailView, OrderDetailView)
 
 urlpatterns = [
     path('api/v1/categories', CategoryListView.as_view(), name='categories'),
@@ -14,6 +14,7 @@ urlpatterns = [
     path('cart', CartView.as_view(), name='cart'),
     path('add_cart_item/<slug:slug>', AddToCartView.as_view(), name='add_cart_item'),
     path('remove_cart_item/<slug:slug>', RemoveFromCartView.as_view(), name='remove_cart_item'),
-    path('order_detail', OrdersDetailView.as_view(), name='order_detail')
+    path('orders_detail', OrdersDetailView.as_view(), name='orders_detail'),
+    path('order_detail/<int:order_id>', OrderDetailView.as_view(), name='order_detail')
 
 ]

@@ -2,29 +2,19 @@
 {% load static %}
 
 {% block content %}
-  <h1>Order Details</h1>
+  <h1>Orders List</h1>
   {% if orders %}
-    {% for order in orders %}
-      <div>
-        <p><strong>Order Date:</strong> {{ order.order_date }}</p>
-        <p><strong>Client:</strong> {{ order.client.first_name }} {{ order.client.surname }}</p>
-        <p><strong>Status:</strong> {{ order.order_status }}</p>
-        <p><strong>Total Price:</strong> ${{ order.order_price }}</p>
-      </div>
-      <div>
-        <h2>Order Items</h2>
-        <ul>
-          {% for item in order.order_items.all %}
-            <li>
-              <strong>Component:</strong> {{ item.component.name }}<br>
-              <strong>Quantity:</strong> {{ item.quantity }}<br>
-              <strong>Price:</strong> ${{ item.price }}
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-      <hr>  <!-- Add a horizontal line between each order -->
-    {% endfor %}
+    <ul>
+      {% for order in orders %}
+        <li>
+          <form action="{% url 'order_detail' order_id=order.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="order_id" value="{{ order.id }}">
+            <button type="submit">View Order Details - {{ order.order_date }}</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
   {% else %}
     <p>No orders found.</p>
   {% endif %}

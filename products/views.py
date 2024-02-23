@@ -137,13 +137,41 @@ class RemoveFromCartView(View):
         return redirect(reverse('cart'))
 
 
-class OrdersDetailView(View):
+class BaseOrderView(View):
+    template_name = None
+
+    def get_client(self, request):
+        return get_object_or_404(Client, user=request.user)
+
+    def get_orders(self, request):
+        client = self.get_client(request)
+        return Order.objects.filter(client=client).all()
+
+    def get_order(self, request, order_id):
+        client = self.get_client(request)
+        return get_object_or_404(Order, client=client, id=order_id)
+
+
+class OrdersDetailView(BaseOrderView):
     template_name = 'products/orders_detail.html'
 
     def get(self, request):
         try:
-            client = Client.objects.get(user=request.user)
-            orders = Order.objects.filter(client=client).all()
+            orders = self.get_orders(request)
         except Order.DoesNotExist:
             print('something')
         return render(request, self.template_name, {'orders': orders})
+
+
+class OrderDetailView(BaseOrderView):
+    template_name = 'products/order_detail.html'
+
+    def get(self, request, order_id):
+        try:
+            order = self.get_order(request, order_id)
+        except Order.DoesNotExist:
+            print('something')
+        return render(request, self.template_name, {'order': order})
+
+    def post(self, request, order_id):
+        return redirect('order_detail', order_id=order_id)
